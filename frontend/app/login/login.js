@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { login } from '../../services/authService'; // 1. authService를 임포트합니다.
+import { login } from '../../services/authService';
+import { useAuth } from '../../context/AuthContext'; // useAuth 훅을 임포트합니다.
 
 // 커스텀 버튼 컴포넌트
 const CustomButton = ({ title, onPress, style, textStyle }) => (
@@ -12,10 +13,10 @@ const CustomButton = ({ title, onPress, style, textStyle }) => (
 
 export default function LoginScreen() {
     const router = useRouter();
+    const { login: authLogin } = useAuth(); // useAuth 훅을 사용해 login 함수를 가져옵니다.
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    // 2. 로그인 로직을 담은 비동기 함수를 추가합니다.
     const handleLogin = async () => {
         if (!email || !password) {
             Alert.alert('오류', '이메일과 비밀번호를 모두 입력해주세요.');
@@ -23,11 +24,14 @@ export default function LoginScreen() {
         }
 
         try {
-            const response = await login(email, password);
-
-            // TODO: 실제 토큰을 저장하거나 상태 관리하는 로직 추가
-            Alert.alert('로그인 성공', '홈 화면으로 이동합니다.');
-            // router.push('/home');
+            const userData = await login(email, password);
+            
+            // 로그인 성공 시 AuthContext의 login 함수 호출
+            authLogin(userData);
+            
+            Alert.alert('로그인 성공', '홈 화면으로 이동합니다.', [
+              { text: '확인', onPress: () => router.replace('/home') }
+            ]);
 
         } catch (error) {
             Alert.alert('로그인 실패', error.message);
@@ -72,7 +76,7 @@ export default function LoginScreen() {
             <View style={styles.authContainer}>
                 <CustomButton
                     title="로그인"
-                    onPress={handleLogin} // 3. handleLogin 함수를 연결합니다.
+                    onPress={handleLogin}
                     style={styles.loginButton}
                     textStyle={styles.loginButtonText}
                 />
