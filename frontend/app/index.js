@@ -1,26 +1,29 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router'; // useRouter를 임포트합니다.
 
-const SocialButton = ({ title, icon, backgroundColor, textColor, borderColor }) => (
+const SocialButton = ({ title, icon, backgroundColor, textColor, borderColor, onPress }) => (
     <TouchableOpacity
         style={[styles.socialButton, { backgroundColor: backgroundColor, borderColor: borderColor }]}
-        onPress={() => console.log(`${title} 버튼 클릭`)}
+        onPress={onPress}
     >
         <Text style={[styles.socialButtonIcon, { color: textColor }]}>{icon}</Text>
         <Text style={[styles.socialButtonText, { color: textColor }]}>{title}</Text>
     </TouchableOpacity>
 );
 
-const LoginButton = ({ title, backgroundColor, textColor, borderColor }) => (
+const LoginButton = ({ title, backgroundColor, textColor, borderColor, onPress }) => (
     <TouchableOpacity
         style={[styles.loginButton, { backgroundColor: backgroundColor, borderColor: borderColor }]}
-        onPress={() => console.log(`${title} 버튼 클릭`)}
+        onPress={onPress}
     >
         <Text style={[styles.loginButtonText, { color: textColor }]}>{title}</Text>
     </TouchableOpacity>
 );
 
 export default function LoginPage() {
+    const router = useRouter(); // useRouter 훅을 사용합니다.
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -40,7 +43,6 @@ export default function LoginPage() {
                     backgroundColor="#FEE500"
                     textColor="#191919"
                     borderColor="#FEE500"
-
                 />
                 <SocialButton
                     title="Apple로 시작하기"
@@ -48,7 +50,6 @@ export default function LoginPage() {
                     backgroundColor="#000000"
                     textColor="#FFFFFF"
                     borderColor="#000000"
-
                 />
                 <SocialButton
                     title="네이버로 시작하기"
@@ -56,7 +57,6 @@ export default function LoginPage() {
                     backgroundColor="#03C75A"
                     textColor="#FFFFFF"
                     borderColor="#03C75A"
-
                 />
                 <SocialButton
                     title="Google로 시작하기"
@@ -66,7 +66,6 @@ export default function LoginPage() {
                     borderColor="#CCCCCC"
                 />
             </View>
-
             <View style={styles.separatorContainer}>
                 <View style={styles.separatorLine} />
                 <Text style={styles.separatorText}>또는</Text>
@@ -79,12 +78,14 @@ export default function LoginPage() {
                     backgroundColor="#FFFFFF"
                     textColor="#191919"
                     borderColor="#CCCCCC"
+                    onPress={() => router.push('login/login')} // 경로를 login/login으로 변경합니다.
                 />
                 <LoginButton
                     title="회원가입"
                     backgroundColor="#FFFFFF"
                     textColor="#191919"
                     borderColor="#CCCCCC"
+                    onPress={() => console.log('회원가입 버튼 클릭')}
                 />
             </View>
 
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
         marginBottom: 50,
     },
     title: {
-        fontSize: 40,
+        fontSize: 32,
         fontWeight: 'bold',
         color: '#DE5897',
         marginBottom: 5,
