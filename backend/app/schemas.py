@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field, EmailStr, validator
-from typing import Optional
-from datetime import date, datetime
+from pydantic import BaseModel, Field, EmailStr, validator # pydantic의 BaseModel, Field, EmailStr, validator 임포트
+from typing import Optional # Optional 임포트
+from datetime import date, datetime # date, datetime 임포트
 
 # 유저 스키마
 
@@ -21,7 +21,9 @@ class UserBase(BaseModel):
     # 관심사 : 데이트, 회식, 가족모임 등 
     interests : Optional[str] = Field(None, example="데이트, 회식, 가족모임")
     # 알러지 여부
-    allergies : Optional[str] = Field(None, example = "땅콩, 새우")
+    allergies : bool =Field(False)
+    # 알러지 정보
+    allergies_detail : Optional[str] = Field(None, example = "땅콩, 새우")
     # 비밀번호 설정
     password : str = Field(..., min_length=8, max_length=20, example= "1q2w3e4r!")
     
@@ -37,22 +39,24 @@ class UserBase(BaseModel):
     
 # API 응답으로 보낼 사용자 정보 형식 정의 (비밀번호 제외)
 class User(BaseModel):
-    id : str
-    name : str
-    email : EmailStr
-    phone : str
-    address : str
-    interests : Optional[str]
-    allergies : Optional[str]
-    is_verified : bool
-    
-    class Config : 
-        orm_mode=True
+    id : str # 사용자 ID
+    name : str # 사용자 이름
+    birthdate : date # 사용자 생년월일
+    email : EmailStr # 사용자 이메일
+    phone : str # 사용자 전화번호
+    address : str # 사용자 주소
+    interests : Optional[str] # 사용자 관심사
+    allergies : bool # 사용자 알레르기
+    allergies_detail : Optional[str] # 사용자 알레르기 상세
+    is_verified : bool # 사용자 이메일 인증 여부
+
+    class Config : # Config 클래스
+        orm_mode=True # ORM 모드 활성화
 
 # 나머지 스키마
-class RestaurantBase(BaseModel):
-    name: str
-    address: str
+class RestaurantBase(BaseModel): # 가게 기본 필드
+    name: str # 가게 이름
+    address: str # 가게 주소
     summary : Optional[str] = None # 가게 요약 정보
     category : Optional[str] = None # 가게 카테고리
     phone : Optional[str] = None # 가게 연락처
@@ -69,8 +73,9 @@ class RestaurantBase(BaseModel):
     bookmark_count : int = Field(default=0) # 북마크 수
     comment_count : int = Field(default=0) # 댓글 수
     share_count : int = Field(default=0) # 공유 수
+    is_favorite_count : int = Field(default=0) # 즐겨찾기 수
 
-class Restaurant(RestaurantBase):
-    id: int
-    class Config: 
-        orm_mode = True
+class Restaurant(RestaurantBase): # 가게 응답 필드
+    id: int # 가게 ID
+    class Config: # Config 클래스
+        orm_mode = True # ORM 모드 활성화

@@ -20,7 +20,7 @@ class User(Base): # User 모델 정의
     
     # 개인화 정보
     interest = Column(String, nullable=True) # 관심사
-    allergies = Column(String, nullable=True) # 알레르기 정보
+    allergies = Column(Boolean, default=False) # 알레르기 여부
     allergies_detail = Column(String, nullable=True) # 알레르기 상세 정보
     
     # 계정 상태
