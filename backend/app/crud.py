@@ -1,5 +1,4 @@
 from sqlalchemy.orm import Session
-
 from backend import db
 from . import models, schemas
 from passlib.context import CryptContext

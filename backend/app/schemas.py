@@ -13,7 +13,7 @@ class UserBase(BaseModel):
     # 성별 : 남자, 여자
     gender : str = Field(..., example="남자")
     # 이메일
-    email : str = Field(..., example="user@example.com")
+    email : EmailStr = Field(..., example="user@example.com")
     # 연락처 : 01012345678 형식 (11자리)
     phone : str = Field(..., example="01012345678")
     # 집 주소
@@ -26,6 +26,19 @@ class UserBase(BaseModel):
     allergies_detail : Optional[str] = Field(None, example = "땅콩, 새우")
     # 비밀번호 설정
     password : str = Field(..., min_length=8, max_length=20, example= "1q2w3e4r!")
+    
+    # 회원가입 시 받을 데이터 형식 정의
+    class UserCreate(UserBase):
+        password : str = Field(..., min_length=8, max_length=20)
+        
+    # API 응답으로 보낼 사용자 정보 형식 정의 (비밀번호 제외)
+    class User(UserBase):
+        id: int
+        is_verified: bool
+
+    class Config:
+        orm_mode = True
+    
     
     # birthdate 필드에 대한 유효성 검사기 (validator)
     @validator('birthdate')
