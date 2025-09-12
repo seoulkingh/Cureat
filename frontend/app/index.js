@@ -78,7 +78,7 @@ export default function LoginPage() {
                     backgroundColor="#FFFFFF"
                     textColor="#191919"
                     borderColor="#CCCCCC"
-                    onPress={() => router.push('login/login')} // 경로를 login/login으로 변경합니다.
+                    onPress={() => router.push('login/')} // 경로를 login/login으로 변경합니다.
                 />
                 <LoginButton
                     title="회원가입"

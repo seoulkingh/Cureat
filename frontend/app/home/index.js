@@ -7,9 +7,9 @@ export default function HomeScreen() {
   const router = useRouter();
   const { user, logout } = useAuth(); // useAuth 훅을 사용하여 전역 상태에 접근
 
-  const handleLogout = () => {
-    logout(); // 로그아웃 함수 호출
-    router.replace('/login/login'); // 로그인 페이지로 이동
+  const handleLogout = async () => {
+    await logout(); // 로그아웃 함수 호출
+    router.replace('/login'); // 로그인 페이지로 이동
   };
 
   return (
