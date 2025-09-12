@@ -1,17 +1,16 @@
-from pydantic import BaseModel, Field, EmailStr, validator # pydantic의 BaseModel, Field, EmailStr, validator 임포트
-from typing import Optional # Optional 임포트
+from pydantic import BaseModel, Field, EmailStr # pydantic의 BaseModel, Field, EmailStr, validator 임포트
+from typing import Optional, List # Optional 임포트
 from datetime import date, datetime # date, datetime 임포트
 import re # 정규표현식 모듈 임포트
-from typing import List # List 임포트
+
 
 # 유저 스키마
-
 # User 모델 기본 필드
 class UserCreate(BaseModel):
     """회원가입 요청 시 받을 데이터 형식"""
     # 이름
     name : str = Field(..., example="홍길동")
-    # 생년월일 : YYYYMMDD 형식
+    # React Native에서 'YYYY-MM-DD' 형식의 문자열로 보내면 FastAPI가 date 객체로 자동 변환
     birthdate: date = Field(..., example="1995-10-24")
     # 성별 : 남자, 여자
     gender : str = Field(..., example="남자")
@@ -35,6 +34,7 @@ class User(BaseModel):
     id : int # 사용자 ID
     name : str # 사용자 이름
     birthdate : date # 사용자 생년월일
+    gender : str # 사용자 성별
     email : EmailStr # 사용자 이메일
     phone : str # 사용자 전화번호
     address : str # 사용자 주소
@@ -49,19 +49,11 @@ class User(BaseModel):
 # 음식점 스키마
 class RestaurantDetail(BaseModel): # 가게 기본 필드
     name: str # 가게 이름
-    address: str # 가게 주소
+    address: Optional[str] = None # 가게 주소
     image_url: Optional[str] = None # 가게 이미지 URL
+    # 프론트 엔드에서 지도에 마커 표시할 때 사용할 좌표
     mapx : Optional[str] = None # 가게 위치 X 좌표
     mapy : Optional[str] = None # 가게 위치 Y 좌표    
-    
-    is_favorite : Optional[bool] = None # 즐겨찾기 여부
-    view_count : int = Field(default=0) # 조회수
-    like_count : int = Field(default=0) # 좋아요 수
-    dislike_count : int = Field(default=0) # 싫어요 수
-    bookmark_count : int = Field(default=0) # 북마크 수
-    comment_count : int = Field(default=0) # 댓글 수
-    share_count : int = Field(default=0) # 공유 수
-    is_favorite_count : int = Field(default=0) # 즐겨찾기 수
     
     # AI 요약 정보
     summary_pros: Optional[List[str]] = Field(None, description="음식점 장점 3가지 요약")
@@ -74,10 +66,17 @@ class RestaurantDetail(BaseModel): # 가게 기본 필드
     summary_price: Optional[str] = Field(None, description="가격대")
     summary_opening_hours: Optional[str] = Field(None, description="영업시간")
     
+    view_count : int = 0 # 조회수
+    like_count : int = 0 # 좋아요 수
+    dislike_count : int = 0 # 싫어요 수
+    comment_count : int = 0 # 댓글 수
+    share_count : int = 0 # 공유 수
+    is_favorite_count : int = 0 # 즐겨찾기 수
+
     class Config: # Config 클래스
         orm_mode = True # ORM 모드 활성화
 
-# --- API Schemas ---
+# API 스키마
 
 class ChatRequest(BaseModel):
     """맛집 추천 요청 시 받을 데이터 형식"""
@@ -120,6 +119,5 @@ class Review(ReviewCreate):
     """API 응답으로 보낼 리뷰 정보 형식"""
     id: int
     created_at: datetime
-
     class Config:
         orm_mode = True

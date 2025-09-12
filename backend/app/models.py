@@ -4,13 +4,11 @@ from sqlalchemy.sql import func # SQLAlchemy 함수
 from .database import Base # SQLAlchemy3 Base 가져오기
 from pgvector.sqlalchemy import Vector # pgvector 임포트
 
-
 class User(Base): # User 모델 정의
     __tablename__ = "users" # 테이블 이름
     
-    user_id = Column(Integer, primary_key=True, index=True) # 사용자 ID
-    
-    # 기본 정보
+    # 유저 기본 정보
+    id = Column(Integer, primary_key=True, index=True) # 사용자 ID
     name = Column(String, nullable=False) # 이름
     birthdate = Column(Date, nullable=False) # 생년월일
     gender = Column(String, nullable=False) # 성별
@@ -35,43 +33,18 @@ class User(Base): # User 모델 정의
 
 # 음식점 모델
 class Restaurant(Base):
+    """맛집 최소 정보 (PostgreSQL에 저장) - 리뷰 연결용"""
     __tablename__ = "restaurants"
     id = Column(Integer, primary_key=True, index=True) # 음식점 ID
-    
     name = Column(String, index=True, nullable=False) # 음식점 이름
     address = Column(String, nullable=False) # 음식점 주소
-    
-    category = Column(String, nullable=False) # 음식점 카테고리
-    phone = Column(String, nullable=True) # 음식점 연락처
-    opening_hours = Column(String, nullable=True) # 영업 시간
-    price_range = Column(String, nullable=True) # 가격대
-    parking = Column(String, nullable=True) # 주차 가능 여부
-    view_count = Column(Integer, default=0) # 조회수
-    like_count = Column(Integer, default=0) # 좋아요 수
-    dislike_count = Column(Integer, default=0) # 싫어요 수
-    bookmark_count = Column(Integer, default=0) # 북마크 수
-    comment_count = Column(Integer, default=0) # 댓글 수
-    share_count = Column(Integer, default=0) # 공유 수
-    is_favorite_count = Column(Integer, default=0) # 즐겨찾기 수
-    
-    # AI가 생성하고 저장할 요약 정보
-    summary_pros = Column(Text, nullable=True) # 음식점 장점 요약
-    summary_cons = Column(Text, nullable=True) # 음식점 단점 요약   
-    keywords = Column(Text, nullable=True) # 음식점 키워드
-    nearby_attractions = Column(Text, nullable=True) # 주변 놀거리
-    signature_menu = Column(Text, nullable=True) # 시그니처 메뉴
-    summary_phone = Column(String, nullable=True) # 전화번호
-    summary_parking = Column(String, nullable=True) # 주차 가능 여부
-    summary_price = Column(String, nullable=True) # 가격대
-    summary_opening_hours = Column(String, nullable=True) # 영업 시간
+    # 이름과 주소 조합으로 고유성 유지
     image_url = Column(String, nullable=True) # 음식점 이미지 URL
-    
-    vector = Column(Vector(1536), nullable=True) # 벡터 임베딩 (1536차원)
-    
+        
     reviews = relationship("Review", back_populates="restaurant") # 리뷰
     
     
-class Review(Base): # Review 모델 정의
+class Review(Base): # Review 모델 정의 (사용자 리뷰 저장용)
     __tablename__ = "reviews" # 테이블 이름
     
     id = Column(Integer, primary_key=True, index=True) # 리뷰 ID
@@ -84,7 +57,7 @@ class Review(Base): # Review 모델 정의
     user = relationship("User", back_populates="reviews") # 사용자와의 관계
     restaurant = relationship("Restaurant", back_populates="reviews") # 음식점과의 관계
     
-    
+# 검색 기록 저장 모델    
 class SearchLog(Base): # SearchLog 모델 정의
     __tablename__ = "search_logs" # 테이블 이름
     
@@ -92,5 +65,4 @@ class SearchLog(Base): # SearchLog 모델 정의
     user_id = Column(Integer, ForeignKey("users.id")) # 사용자 ID
     query = Column(String, nullable=False) # 검색어
     timestamp = Column(DateTime(timezone=True), server_default=func.now()) # 검색 시간
-    
     user = relationship("User", back_populates="search_logs") # 사용자와의 관계
