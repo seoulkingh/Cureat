@@ -1,7 +1,5 @@
-// frontend/components/ResultScreen.js
-
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, FlatList, Image, TextInput } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, FlatList, Image, TextInput, Keyboard, PanResponder } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const ResultCard = ({ item }) => (
@@ -11,48 +9,107 @@ const ResultCard = ({ item }) => (
             <Text style={styles.cardTitle}>{item.name}</Text>
             <View style={styles.cardRatingContainer}>
                 <Text style={styles.cardRating}>★ {item.rating}</Text>
-                <Text style={styles.cardReviews}>({item.reviews} reviews)</Text>
+                <Text style={styles.cardReviews}>({item.reviews})</Text>
             </View>
             <Text style={styles.cardDescription}>{item.description}</Text>
         </View>
     </View>
 );
 
-const ResultScreen = ({ searchResults, handleSearch, searchQuery, setSearchQuery }) => {
+const ResultScreen = ({
+    searchResults,
+    searchQuery,
+    setSearchQuery,
+    handleSearch,
+    handleBack,
+    isLoading,
+    activeFilters,
+    toggleFilter,
+    textInputRef
+}) => {
     const navigation = useNavigation();
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            (e) => {
+                setKeyboardHeight(e.endCoordinates.height);
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setKeyboardHeight(0);
+            }
+        );
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
+
+    const renderFooter = () => (
+        <View style={[styles.footerSearchContainer, { marginBottom: keyboardHeight }]}>
+            <View style={styles.searchBarWrapper}>
+                <TextInput
+                    ref={textInputRef}
+                    style={styles.searchInput}
+                    placeholder="음식점, 요리 또는 지역을 검색하세요"
+                    placeholderTextColor="#888"
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                    onSubmitEditing={handleSearch}
+                />
+            </View>
+        </View>
+    );
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                <TouchableOpacity onPress={handleBack} style={styles.backButton}>
                     <Text style={styles.backIcon}>←</Text>
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Results</Text>
             </View>
-
-            {/* Results List */}
+            <View style={styles.filterTagContainer}>
+                {activeFilters.map(filter => (
+                    <TouchableOpacity
+                        key={filter.id}
+                        onPress={() => toggleFilter(filter.id)}
+                        style={[
+                            styles.filterTag,
+                            filter.active ? styles.filterTagActive : styles.filterTagInactive
+                        ]}
+                    >
+                        <Text style={[
+                            styles.filterTagText,
+                            filter.active ? styles.filterTagTextActive : styles.filterTagTextInactive
+                        ]}>
+                            {filter.text}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
             <FlatList
                 data={searchResults}
                 renderItem={({ item }) => <ResultCard item={item} />}
                 keyExtractor={item => item.id}
-                contentContainerStyle={styles.listContainer}
-                ListEmptyComponent={<Text style={styles.noResultsText}>검색 결과가 없습니다.</Text>}
+                ListEmptyComponent={
+                    isLoading ? (
+                        <Text style={styles.loadingText}>검색 중...</Text>
+                    ) : (
+                        <Text style={styles.noResultsText}>
+                            {activeFilters.length > 0 ? '선택된 필터에 해당하는 결과가 없습니다.' : '검색어를 입력해주세요.'}
+                        </Text>
+                    )
+                }
+                style={styles.resultsList}
+                contentContainerStyle={styles.resultsListContent}
             />
-
-            {/* Footer Search Bar */}
-            <View style={styles.footerSearchContainer}>
-                <View style={styles.footerSearchWrapper}>
-                    <TextInput
-                        style={styles.footerSearchInput}
-                        placeholder="Search for restaurants or cuisines"
-                        placeholderTextColor="#888"
-                        value={searchQuery}
-                        onChangeText={setSearchQuery}
-                        onSubmitEditing={handleSearch}
-                    />
-                </View>
-            </View>
+            {renderFooter()}
         </SafeAreaView>
     );
 };
@@ -65,28 +122,75 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
         paddingVertical: 15,
-        paddingHorizontal: 20,
         borderBottomWidth: 1,
         borderBottomColor: '#E0E0E0',
     },
     backButton: {
-        paddingRight: 10,
+        position: 'absolute',
+        left: 15,
+        padding: 5,
     },
     backIcon: {
         fontSize: 24,
-        color: '#000',
+        color: '#DE5897',
     },
     headerTitle: {
         fontSize: 20,
         fontWeight: 'bold',
         color: '#000',
-        flex: 1,
-        textAlign: 'center',
-        marginLeft: -34,
     },
-    listContainer: {
-        padding: 15,
+    filterTagContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#E0E0E0',
+    },
+    filterTag: {
+        borderRadius: 20,
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+        marginRight: 10,
+        marginBottom: 10,
+    },
+    filterTagActive: {
+        backgroundColor: '#DE5897',
+    },
+    filterTagInactive: {
+        backgroundColor: '#E0E0E0',
+    },
+    filterTagText: {
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+    filterTagTextActive: {
+        color: '#fff',
+    },
+    filterTagTextInactive: {
+        color: '#666',
+    },
+    resultsList: {
+        flex: 1,
+        paddingHorizontal: 15,
+    },
+    resultsListContent: {
+        paddingTop: 10,
+        paddingBottom: 20,
+    },
+    loadingText: {
+        textAlign: 'center',
+        marginTop: 50,
+        fontSize: 16,
+        color: '#888',
+    },
+    noResultsText: {
+        textAlign: 'center',
+        marginTop: 50,
+        fontSize: 16,
+        color: '#888',
     },
     card: {
         flexDirection: 'row',
@@ -134,26 +238,29 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: '#666',
     },
-    noResultsText: {
-        textAlign: 'center',
-        marginTop: 50,
-        fontSize: 16,
-        color: '#888',
-    },
     footerSearchContainer: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 20, // 바닥에서 20px 위로 올림
+        backgroundColor: '#fff',
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderTopWidth: 1,
         borderTopColor: '#E0E0E0',
     },
-    footerSearchWrapper: {
+    searchBarWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
         backgroundColor: '#F5F5F5',
         borderRadius: 25,
         height: 45,
-        paddingHorizontal: 15,
-        justifyContent: 'center',
+        paddingLeft: 10,
     },
-    footerSearchInput: {
+    searchInput: {
+        flex: 1,
+        height: '100%',
+        paddingHorizontal: 15,
         fontSize: 16,
         color: '#000',
     },
