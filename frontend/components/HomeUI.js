@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TextInput, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, TextInput, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
+import { search } from '../services/searchService'; // 새로 만든 searchService 임포트
 
 // 더미 데이터
 const popularRestaurants = [
@@ -37,6 +38,7 @@ const HomeUI = ({ handleLogout }) => {
   const [isCourseActive, setIsCourseActive] = useState(false);
   const [openFilter, setOpenFilter] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({});
+  const [searchQuery, setSearchQuery] = useState(''); // 검색어 상태 추가
 
   const handleFilterPress = (filterId) => {
     setOpenFilter(openFilter === filterId ? null : filterId);
@@ -48,6 +50,32 @@ const HomeUI = ({ handleLogout }) => {
       [filterId]: tagName
     }));
     setOpenFilter(null);
+  };
+
+  const handleResetFilters = () => {
+    setSelectedFilters({});
+  };
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      Alert.alert('알림', '검색어를 입력해주세요.');
+      return;
+    }
+    
+    try {
+      // 1. searchService를 통해 백엔드 API 호출
+      const searchResults = await search(searchQuery);
+      
+      // 2. 검색 성공 시 처리
+      console.log('검색 결과:', searchResults);
+      Alert.alert('검색 성공', '검색 결과를 콘솔에서 확인하세요.');
+      // TODO: 검색 결과를 화면에 표시하는 로직을 추가해야 합니다.
+      
+    } catch (error) {
+      // 3. 검색 실패 시 사용자에게 알림
+      console.error('검색 오류:', error);
+      Alert.alert('검색 오류', error.message || '검색 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -76,18 +104,39 @@ const HomeUI = ({ handleLogout }) => {
               style={styles.searchInput}
               placeholder="음식점, 요리 또는 지역을 검색하세요"
               placeholderTextColor="#888"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              onSubmitEditing={handleSearch} // 엔터 키 입력 시 검색 실행
             />
           </View>
           <View style={styles.tagContainer}>
+            <TouchableOpacity onPress={handleResetFilters} style={styles.resetButton}>
+              <Text style={styles.resetButtonText}>초기화</Text>
+            </TouchableOpacity>
             {filterCategories.map(filter => (
               <View key={filter.id} style={styles.filterTagWrapper}>
-                <TouchableOpacity onPress={() => handleFilterPress(filter.id)} style={styles.filterTag}>
-                  <Text style={styles.filterTagText}>
+                <TouchableOpacity onPress={() => handleFilterPress(filter.id)} 
+                  style={[
+                    styles.filterTag,
+                    !selectedFilters[filter.id] && styles.filterTagInactive // 선택되지 않았을 때 스타일 적용
+                  ]}
+                >
+                  <Text style={[
+                    styles.filterTagText,
+                    !selectedFilters[filter.id] && styles.filterTagTextInactive // 선택되지 않았을 때 텍스트 스타일 적용
+                  ]}>
                     {selectedFilters[filter.id] || filter.name}
                   </Text>
                 </TouchableOpacity>
                 {openFilter === filter.id && (
                   <View style={styles.filterDropdown}>
+                    <TouchableOpacity 
+                      key="none" 
+                      style={styles.dropdownItem}
+                      onPress={() => handleTagSelect(filter.id, null)} // '선택 안 함' 기능
+                    >
+                      <Text style={styles.dropdownItemText}>선택 안 함</Text>
+                    </TouchableOpacity>
                     {filter.tags.map(tag => (
                       <TouchableOpacity 
                         key={tag} 
@@ -181,7 +230,7 @@ const styles = StyleSheet.create({
   logo: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#DE5897',
+    color: '#DE5897', // 로고 색상 변경
   },
   menuIcon: {
     fontSize: 24,
@@ -235,6 +284,19 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     flexWrap: 'wrap',
   },
+  resetButton: {
+    backgroundColor: '#E0E0E0',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  resetButtonText: {
+    color: '#666',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
   filterTagWrapper: {
     position: 'relative',
     marginRight: 10,
@@ -246,9 +308,15 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 15,
   },
+  filterTagInactive: {
+    backgroundColor: '#E0E0E0',
+  },
   filterTagText: {
     color: '#DE5897',
     fontSize: 14,
+  },
+  filterTagTextInactive: {
+    color: '#666',
   },
   filterDropdown: {
     position: 'absolute',

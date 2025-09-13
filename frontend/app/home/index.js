@@ -1,3 +1,5 @@
+// frontend/app/home/index.js
+
 import React from 'react';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../context/AuthContext';

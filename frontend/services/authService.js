@@ -19,15 +19,15 @@ export const login = async (email, password) => {
     return testLogin(email, password);
   }
 
-  // 프로덕션 모드에서는 실제 API 호출
-  try {
-    const response = await fetch(`${API_URL}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
+// 프로덕션 모드에서는 실제 API 호출
+try {
+  const response = await fetch(`${API_URL}/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username: email, password: password }), // 이 부분을 수정
+  });
 
     const data = await response.json();
 
