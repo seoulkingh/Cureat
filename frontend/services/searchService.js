@@ -1,32 +1,22 @@
-// frontend/services/searchService.js
+import { search as testSearch } from './searchServiceTest';
 
-// API 엔드포인트
-const API_URL = 'https://your-backend-api.com/api/search'; // 실제 백엔드 URL로 변경해주세요.
+const API_ENDPOINT = 'https://your-backend-api.com/search';
 
-/**
- * 사용자 검색어를 백엔드로 전송하는 함수
- * @param {string} query - 사용자가 입력한 검색어
- * @returns {Promise<object>} - 검색 결과 데이터
- */
 export const search = async (query) => {
+  if (__DEV__) {
+    console.log('Using mock search service in development mode.');
+    return testSearch(query);
+  }
+
   try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ query }),
-    });
-
-    const data = await response.json();
-
+    const response = await fetch(`${API_ENDPOINT}?query=${encodeURIComponent(query)}`);
     if (!response.ok) {
-      throw new Error(data.message || '검색에 실패했습니다.');
+      throw new Error('API 호출 중 오류 발생');
     }
-
+    const data = await response.json();
     return data;
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error);
-    throw error;
+    throw new Error('검색 오류가 발생했습니다.');
   }
 };

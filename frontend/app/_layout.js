@@ -41,6 +41,8 @@ const AppContent = () => {
             <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen name="login/index" options={{ headerShown: false }} />
             <Stack.Screen name="home/index" options={{ headerShown: false }} />
+            <Stack.Screen name="search/index" options={{ headerShown: false }} />
+            
         </Stack>
     );
 };

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TextInput, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
-import { search } from '../services/searchService'; // 새로 만든 searchService 임포트
 
 // 더미 데이터
 const popularRestaurants = [
@@ -34,7 +33,7 @@ const RestaurantCard = ({ item }) => (
   </View>
 );
 
-const HomeUI = ({ handleLogout }) => {
+const HomeUI = ({ handleLogout, handleSearch }) => {
   const [isCourseActive, setIsCourseActive] = useState(false);
   const [openFilter, setOpenFilter] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({});
@@ -54,28 +53,6 @@ const HomeUI = ({ handleLogout }) => {
 
   const handleResetFilters = () => {
     setSelectedFilters({});
-  };
-
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) {
-      Alert.alert('알림', '검색어를 입력해주세요.');
-      return;
-    }
-    
-    try {
-      // 1. searchService를 통해 백엔드 API 호출
-      const searchResults = await search(searchQuery);
-      
-      // 2. 검색 성공 시 처리
-      console.log('검색 결과:', searchResults);
-      Alert.alert('검색 성공', '검색 결과를 콘솔에서 확인하세요.');
-      // TODO: 검색 결과를 화면에 표시하는 로직을 추가해야 합니다.
-      
-    } catch (error) {
-      // 3. 검색 실패 시 사용자에게 알림
-      console.error('검색 오류:', error);
-      Alert.alert('검색 오류', error.message || '검색 중 오류가 발생했습니다.');
-    }
   };
 
   return (
@@ -106,7 +83,7 @@ const HomeUI = ({ handleLogout }) => {
               placeholderTextColor="#888"
               value={searchQuery}
               onChangeText={setSearchQuery}
-              onSubmitEditing={handleSearch} // 엔터 키 입력 시 검색 실행
+              onSubmitEditing={() => handleSearch(searchQuery)} // 엔터 키 입력 시 검색 실행
             />
           </View>
           <View style={styles.tagContainer}>
