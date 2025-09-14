@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TextInput, TouchableOpacity, FlatList, Image, Alert } from 'react-native';
+import Footer from './Footer';
 
 // 더미 데이터
 const popularRestaurants = [
@@ -42,7 +43,7 @@ const HomeUI = ({ handleLogout, handleSearch }) => {
   const handleFilterPress = (filterId) => {
     setOpenFilter(openFilter === filterId ? null : filterId);
   };
-  
+
   const handleTagSelect = (filterId, tagName) => {
     setSelectedFilters(prevFilters => ({
       ...prevFilters,
@@ -69,7 +70,7 @@ const HomeUI = ({ handleLogout, handleSearch }) => {
         {/* Search Bar & Categories */}
         <View style={styles.searchContainer}>
           <View style={styles.searchBarWrapper}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={isCourseActive ? styles.searchButtonActive : styles.searchButtonInactive}
               onPress={() => setIsCourseActive(!isCourseActive)}
             >
@@ -92,7 +93,7 @@ const HomeUI = ({ handleLogout, handleSearch }) => {
             </TouchableOpacity>
             {filterCategories.map(filter => (
               <View key={filter.id} style={styles.filterTagWrapper}>
-                <TouchableOpacity onPress={() => handleFilterPress(filter.id)} 
+                <TouchableOpacity onPress={() => handleFilterPress(filter.id)}
                   style={[
                     styles.filterTag,
                     !selectedFilters[filter.id] && styles.filterTagInactive // 선택되지 않았을 때 스타일 적용
@@ -107,16 +108,16 @@ const HomeUI = ({ handleLogout, handleSearch }) => {
                 </TouchableOpacity>
                 {openFilter === filter.id && (
                   <View style={styles.filterDropdown}>
-                    <TouchableOpacity 
-                      key="none" 
+                    <TouchableOpacity
+                      key="none"
                       style={styles.dropdownItem}
                       onPress={() => handleTagSelect(filter.id, null)} // '선택 안 함' 기능
                     >
                       <Text style={styles.dropdownItemText}>선택 안 함</Text>
                     </TouchableOpacity>
                     {filter.tags.map(tag => (
-                      <TouchableOpacity 
-                        key={tag} 
+                      <TouchableOpacity
+                        key={tag}
                         style={styles.dropdownItem}
                         onPress={() => handleTagSelect(filter.id, tag)}
                       >
@@ -170,21 +171,8 @@ const HomeUI = ({ handleLogout, handleSearch }) => {
       </ScrollView>
 
       {/* Footer / Tab Bar */}
-      <View style={styles.tabBar}>
-        <TouchableOpacity style={styles.tabItemActive}>
-          <Text style={styles.tabIconActive}>🏠</Text>
-          <Text style={styles.tabTextActive}>홈</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Text style={styles.tabIcon}>📍</Text>
-          <Text style={styles.tabText}>지도</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={handleLogout}>
-          <Text style={styles.tabIcon}>👤</Text>
-          <Text style={styles.tabText}>마이</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      <Footer />    
+      </SafeAreaView>
   );
 };
 
