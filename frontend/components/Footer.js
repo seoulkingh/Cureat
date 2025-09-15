@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     },
     tabIconActive: {
         fontSize: 24,
-        color: '#DE5897',
+        color: '#888',
     },
     tabText: {
         fontSize: 12,
@@ -70,9 +70,8 @@ const styles = StyleSheet.create({
     },
     tabTextActive: {
         fontSize: 12,
-        color: '#DE5897',
+        color: '#888',
         marginTop: 4,
-        fontWeight: 'bold',
     },
 });
 
