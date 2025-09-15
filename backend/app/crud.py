@@ -1,10 +1,10 @@
-from pyparsing import Any, Dict
 from sqlalchemy.orm import Session
+from sqlalchemy import update
 from backend import db
 from . import models, schemas
 from passlib.context import CryptContext
 from datetime import date
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from passlib.context import CryptContext
 
 # 비밀번호 해싱 설정
@@ -54,12 +54,12 @@ def create_user(db: Session, user: schemas.UserCreate):
     return db_user # 생성된 사용자 반환
 
 # 식당 관련 CRUD 함수
-def get_or_create_restaurant_in_postgres(db: Session, name: str, address: str) -> models.Restaurant:
+def get_or_create_restaurant_in_postgres(db: Session, name: str, address: str, image_url : str = None) -> models.Restaurant:
     """ 
     DB에 맛집이 있으면 정보를 가져오고, 없으면 새로 생성
     이름과 주소를 기준으로 중복 확인
     """
-    restaurant = db.query(models.Restaurant).filter_by(name==name, address==address).first()
+    restaurant = db.query(models.Restaurant).filter_by(name==name, address==address, image_url==image_url).first()
     if restaurant:
         return restaurant
     

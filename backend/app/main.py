@@ -1,38 +1,54 @@
-import os
-import requests
-import google.generativeai as genai
-from dotenv import load_dotenv
+from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy.orm import Session
+from . import crud, models, schemas, service
+from .database import engine, get_db
 
-# .env 파일에서 환경변수 로드
+# 애플리케이션 시작 시, PostgreSQL에 테이블들을 생성합니다.
+models.Base.metadata.create_all(bind=engine)
 
-# API Key 및 모델 설정
-# Gemini API 설정
-genai.configure(api_key=os.getenv("GENAI_API_KEY"))
-# Naver API 설정
-NAVER_CLIENT_ID = os.getenv("NAVER_CLIENT_ID")
-NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET")
+app = FastAPI(title="Cureat API", description="AI 기반 맛집 추천 및 코스 생성 서비스")
 
-# 사용할 Gemini 모델 객체 생성
-gemini_model = genai.Model.get("gemini-1.5-flash")
+@app.get("/", tags=["Root"])
+def read_root():
+    """서버가 정상적으로 실행 중인지 확인하는 기본 경로입니다."""
+    return {"message": "Cureat API 서버에 오신 것을 환영합니다!"}
 
-# 외부 API 호출 함수
+# --- User & Auth ---
+@app.post("/users/signup", response_model=schemas.User, tags=["User"])
+def signup_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    db_user = crud.get_user_by_email(db, email=user.email)
+    if db_user:
+        raise HTTPException(status_code=400, detail="이미 등록된 이메일입니다.")
+    new_user = crud.create_user(db=db, user=user)
+    # (향후 이메일 인증 메일 발송 로직 추가)
+    return new_user
 
-def verify_place_with_naver(place_name: str):
-    """네이버 검색 API로 장소의 실존 여부와 정보 검증"""
-    # 이전 답변에서 제공한 네이버 검색 API 호출 코드
-    url = "https://openapi.naver.com/v1/search/local.json"
-    params = {"query": place_name, "display": 1}
-    headers = {
-        "X-Naver-Client-Id": NAVER_CLIENT_ID,
-        "X-Naver-Client-Secret": NAVER_CLIENT_SECRET
-    }
-    try:
-        response = requests.get(url, headers=headers, params=params)
-        response.raise_for_status()
-        search_results = response.json().get("items", [])
-        return search_results[0] if search_results else None
-    except requests.exceptions.RequestException as e:
-        print(f"네이버 검색 API 호출 중 오류 발생: {e}")
-        return None
+# --- Recommendations & Course ---
+@app.post("/recommendations", response_model=schemas.RecommendationResponse, tags=["Recommendation"])
+def get_recommendations(request: schemas.ChatRequest, db: Session = Depends(get_db)):
+    user = crud.get_user_by_id(db, user_id=request.user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="사용자를 찾을 수 없습니다.")
     
+    recommendation_data = service.get_personalized_recommendation(db, request, user)
+    crud.create_search_log(db, user_id=user.id, query=request.prompt)
+    return recommendation_data
+
+@app.post("/date-course", response_model=schemas.CourseResponse, tags=["Date Course"])
+def create_date_course_api(request: schemas.CourseRequest, db: Session = Depends(get_db)):
+    user = crud.get_user_by_id(db, user_id=request.user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="사용자를 찾을 수 없습니다.")
     
+    course_data = service.create_date_course(db, request, user)
+    return course_data
+
+# --- Reviews (in PostgreSQL) ---
+@app.post("/reviews", response_model=schemas.Review, tags=["Review"])
+def write_review(review: schemas.ReviewCreate, db: Session = Depends(get_db)):
+    # 리뷰 작성을 위해 PostgreSQL에 저장된 맛집 정보 조회
+    # (실제 구현 시, 프론트에서 name, address를 받아 restaurant_id를 찾아야 함)
+    restaurant = crud.get_or_create_restaurant_in_postgres(db, name="리뷰 대상 맛집 이름", address="리뷰 대상 맛집 주소")
+    review.restaurant_id = restaurant.id
+    
+    return crud.create_review(db=db, review=review)
