@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, FlatList, Image, TextInput, Keyboard, PanResponder } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRouter } from 'expo-router';
+import Footer from './Footer';
 
-const ResultCard = ({ item }) => (
-    <View style={styles.card}>
+const ResultCard = ({ item, onPress }) => (
+    <TouchableOpacity onPress={() => onPress(item)} style={styles.card}>
         <Image source={{ uri: item.image }} style={styles.cardImage} />
         <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{item.name}</Text>
@@ -13,7 +14,7 @@ const ResultCard = ({ item }) => (
             </View>
             <Text style={styles.cardDescription}>{item.description}</Text>
         </View>
-    </View>
+    </TouchableOpacity>
 );
 
 const ResultScreen = ({
@@ -28,7 +29,9 @@ const ResultScreen = ({
     textInputRef
 }) => {
     const navigation = useNavigation();
+    const router = useRouter();
     const [keyboardHeight, setKeyboardHeight] = useState(0);
+    const footerHeight = 100; // Footer 컴포넌트의 높이 (스타일시트에서 설정된 값)
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -50,21 +53,9 @@ const ResultScreen = ({
         };
     }, []);
 
-    const renderFooter = () => (
-        <View style={[styles.footerSearchContainer, { marginBottom: keyboardHeight }]}>
-            <View style={styles.searchBarWrapper}>
-                <TextInput
-                    ref={textInputRef}
-                    style={styles.searchInput}
-                    placeholder="음식점, 요리 또는 지역을 검색하세요"
-                    placeholderTextColor="#888"
-                    value={searchQuery}
-                    onChangeText={setSearchQuery}
-                    onSubmitEditing={handleSearch}
-                />
-            </View>
-        </View>
-    );
+    const navigateToDetail = (item) => {
+        router.push({ pathname: 'detail', params: item });
+    };
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -72,7 +63,7 @@ const ResultScreen = ({
                 <TouchableOpacity onPress={handleBack} style={styles.backButton}>
                     <Text style={styles.backIcon}>←</Text>
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>Results</Text>
+                <Text style={styles.headerTitle}>Cureat</Text>
             </View>
             <View style={styles.filterTagContainer}>
                 {activeFilters.map(filter => (
@@ -95,7 +86,7 @@ const ResultScreen = ({
             </View>
             <FlatList
                 data={searchResults}
-                renderItem={({ item }) => <ResultCard item={item} />}
+                renderItem={({ item }) => <ResultCard item={item} onPress={navigateToDetail} />}
                 keyExtractor={item => item.id}
                 ListEmptyComponent={
                     isLoading ? (
@@ -107,9 +98,30 @@ const ResultScreen = ({
                     )
                 }
                 style={styles.resultsList}
-                contentContainerStyle={styles.resultsListContent}
+                contentContainerStyle={[
+                    styles.resultsListContent,
+                    // 검색창과 푸터 높이만큼 패딩을 추가
+                    { paddingBottom: 60 + (styles.footerSearchContainer.paddingVertical * 2) + styles.searchBarWrapper.height }
+                ]}
             />
-            {renderFooter()}
+            {/* 키보드가 나타나면 bottom 값을 동적으로 변경 */}
+            <View style={[
+                styles.footerSearchContainer,
+                { bottom: keyboardHeight > 0 ? keyboardHeight : footerHeight }
+            ]}>
+                <View style={styles.searchBarWrapper}>
+                    <TextInput
+                        ref={textInputRef}
+                        style={styles.searchInput}
+                        placeholder="음식점, 요리 또는 지역을 검색하세요"
+                        placeholderTextColor="#888"
+                        value={searchQuery}
+                        onChangeText={setSearchQuery}
+                        onSubmitEditing={handleSearch}
+                    />
+                </View>
+            </View>
+            <Footer />
         </SafeAreaView>
     );
 };
@@ -134,19 +146,19 @@ const styles = StyleSheet.create({
     },
     backIcon: {
         fontSize: 24,
-        color: '#DE5897',
+        color: '#000',
     },
     headerTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#000',
+        color: '#DE5897',
     },
     filterTagContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         paddingHorizontal: 15,
         paddingVertical: 10,
-        borderBottomWidth: 1,
+        borderBottomWidth: 0,
         borderBottomColor: '#E0E0E0',
     },
     filterTag: {
@@ -242,12 +254,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         right: 0,
-        bottom: 20, // 바닥에서 20px 위로 올림
         backgroundColor: '#fff',
         paddingHorizontal: 20,
         paddingVertical: 10,
-        borderTopWidth: 1,
+        borderTopWidth: 0,
         borderTopColor: '#E0E0E0',
+        zIndex: 10,
     },
     searchBarWrapper: {
         flexDirection: 'row',
