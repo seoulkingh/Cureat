@@ -1,11 +1,14 @@
+// app/search/index.js
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { search } from '../../services/searchService';
+// search와 saveSearchLog 함수를 모두 가져옵니다.
+import { search, saveSearchLog } from '../../services/searchService';
 import ResultScreen from '../../components/ResultScreen';
 
 export default function SearchResultsScreen() {
     const { initialQuery } = useLocalSearchParams();
     const router = useRouter();
+
     const [searchQuery, setSearchQuery] = useState('');
     const [activeFilters, setActiveFilters] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
@@ -19,10 +22,15 @@ export default function SearchResultsScreen() {
         }
         setIsLoading(true);
         try {
-            await search(query); // search 함수에 단일 문자열 전달
-            // 이 프로젝트에서는 검색 결과를 받지 않으므로, 이 줄은 그대로 둡니다.
+            // 1. 백엔드에 검색 로그를 저장합니다.
+            await saveSearchLog(query);
+
+            // 2. 백엔드에서 전체 결과를 가져와 필터링합니다.
+            const results = await search(query);
+            setSearchResults(results);
         } catch (error) {
             console.error('Search error:', error);
+            setSearchResults([]);
         } finally {
             setIsLoading(false);
         }
@@ -41,7 +49,7 @@ export default function SearchResultsScreen() {
             const newFilter = { id: Date.now(), text: searchQuery.trim(), active: true };
             const newFilters = [...activeFilters, newFilter];
             setActiveFilters(newFilters);
-            performSearch(searchQuery.trim()); // `searchQuery` 변수(단일 문자열)만 전달
+            performSearch(searchQuery.trim());
             setSearchQuery('');
         }
     };
