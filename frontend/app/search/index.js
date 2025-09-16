@@ -1,6 +1,8 @@
+// app/search/index.js
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { search } from '../../services/searchService';
+// search와 saveSearchLog 함수를 모두 가져옵니다.
+import { search, saveSearchLog } from '../../services/searchService';
 import ResultScreen from '../../components/ResultScreen';
 
 export default function SearchResultsScreen() {
@@ -13,16 +15,18 @@ export default function SearchResultsScreen() {
     const [isLoading, setIsLoading] = useState(false);
     const textInputRef = useRef(null);
 
-    const performSearch = async (queryList) => {
-        if (!queryList || queryList.length === 0) {
+    const performSearch = async (query) => {
+        if (!query) {
             setSearchResults([]);
             return;
         }
-
         setIsLoading(true);
         try {
-            // 수정: search 함수에 배열을 그대로 전달
-            const results = await search(queryList);
+            // 1. 백엔드에 검색 로그를 저장합니다.
+            await saveSearchLog(query);
+
+            // 2. 백엔드에서 전체 결과를 가져와 필터링합니다.
+            const results = await search(query);
             setSearchResults(results);
         } catch (error) {
             console.error('Search error:', error);
@@ -36,7 +40,7 @@ export default function SearchResultsScreen() {
         if (initialQuery) {
             const initialFilter = { id: Date.now(), text: initialQuery, active: true };
             setActiveFilters([initialFilter]);
-            performSearch([initialQuery]);
+            performSearch(initialQuery);
         }
     }, [initialQuery]);
 
@@ -45,8 +49,8 @@ export default function SearchResultsScreen() {
             const newFilter = { id: Date.now(), text: searchQuery.trim(), active: true };
             const newFilters = [...activeFilters, newFilter];
             setActiveFilters(newFilters);
+            performSearch(searchQuery.trim());
             setSearchQuery('');
-            performSearch(newFilters.filter(f => f.active).map(f => f.text));
         }
     };
 
@@ -59,7 +63,12 @@ export default function SearchResultsScreen() {
             filter.id === id ? { ...filter, active: !filter.active } : filter
         );
         setActiveFilters(updatedFilters);
-        performSearch(updatedFilters.filter(f => f.active).map(f => f.text));
+        const lastActiveFilter = updatedFilters.filter(f => f.active).slice(-1)[0];
+        if (lastActiveFilter) {
+            performSearch(lastActiveFilter.text);
+        } else {
+            performSearch('');
+        }
     };
 
     return (

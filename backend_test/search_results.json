@@ -1,0 +1,452 @@
+[
+  {
+    "id": "1",
+    "name": "홍대 피자마루",
+    "rating": 4.5,
+    "reviews": "250+",
+    "image": "https://placehold.co/100x100/F5F5DC/6A4545?text=피자",
+    "description": "다양한 종류의 수제 피자를 맛볼 수 있는 캐주얼한 분위기의 맛집.",
+    "tags": ["피자", "양식", "이탈리안"]
+  },
+  {
+    "id": "2",
+    "name": "남산 한우정",
+    "rating": 4.8,
+    "reviews": "500+",
+    "image": "https://placehold.co/100x100/A9A9A9/4B4B4B?text=한우",
+    "description": "최고급 한우를 참숯에 구워 먹는 전통 한정식 전문점.",
+    "tags": ["한식", "고기", "한우"]
+  },
+  {
+    "id": "3",
+    "name": "강남 스시와",
+    "rating": 4.9,
+    "reviews": "900+",
+    "image": "https://placehold.co/100x100/C1C1CD/333333?text=스시",
+    "description": "신선한 재료로 만든 오마카세와 스시를 제공하는 고급 일식당.",
+    "tags": ["스시", "일식", "오마카세"]
+  },
+  {
+    "id": "4",
+    "name": "이태원 멕시코 타코",
+    "rating": 4.6,
+    "reviews": "310+",
+    "image": "https://placehold.co/100x100/FFD700/000000?text=타코",
+    "description": "멕시코 본토의 맛을 재현한 타코와 부리또가 인기 메뉴.",
+    "tags": ["타코", "멕시코", "부리또"]
+  },
+  {
+    "id": "5",
+    "name": "연희동 분위기 좋은 카페",
+    "rating": 4.7,
+    "reviews": "1200+",
+    "image": "https://placehold.co/100x100/E6E6FA/483D8B?text=카페",
+    "description": "직접 로스팅한 원두로 내린 커피와 수제 디저트가 맛있는 곳.",
+    "tags": ["카페", "커피", "디저트"]
+  },
+  {
+    "id": "6",
+    "name": "북촌 칼국수 전문점",
+    "rating": 4.3,
+    "reviews": "700+",
+    "image": "https://placehold.co/100x100/B0E0E6/4682B4?text=칼국수",
+    "description": "진하고 깊은 국물 맛이 일품인 손칼국수 맛집.",
+    "tags": ["한식", "칼국수"]
+  },
+  {
+    "id": "7",
+    "name": "종로 쌈밥대통령",
+    "rating": 4.5,
+    "reviews": "400+",
+    "image": "https://placehold.co/100x100/FFB6C1/A52A2A?text=쌈밥",
+    "description": "신선한 채소와 푸짐한 고기 쌈밥 정식을 맛볼 수 있는 식당.",
+    "tags": ["한식", "쌈밥"]
+  },
+  {
+    "id": "8",
+    "name": "명동 마라탕",
+    "rating": 4.2,
+    "reviews": "850+",
+    "image": "https://placehold.co/100x100/DDA0DD/4B0082?text=마라탕",
+    "description": "다양한 재료를 직접 골라 만드는 매콤한 마라탕 전문점.",
+    "tags": ["중식", "마라탕", "매운맛"]
+  },
+  {
+    "id": "9",
+    "name": "가로수길 파스타",
+    "rating": 4.8,
+    "reviews": "610+",
+    "image": "https://placehold.co/100x100/C0C0C0/333333?text=파스타",
+    "description": "트러플 오일 파스타가 특히 유명한 고급스러운 이탈리안 레스토랑.",
+    "tags": ["파스타", "양식", "이탈리안"]
+  },
+  {
+    "id": "10",
+    "name": "삼청동 브런치",
+    "rating": 4.6,
+    "reviews": "720+",
+    "image": "https://placehold.co/100x100/FAFAD2/8B4513?text=브런치",
+    "description": "아름다운 정원 뷰와 함께 즐기는 여유로운 브런치.",
+    "tags": ["브런치", "카페", "양식"]
+  },
+  {
+    "id": "11",
+    "name": "용산 바비큐",
+    "rating": 4.4,
+    "reviews": "540+",
+    "image": "https://placehold.co/100x100/FFDAB9/A52A2A?text=바비큐",
+    "description": "푸짐한 바비큐 플래터와 다양한 사이드 메뉴를 제공하는 곳.",
+    "tags": ["바비큐", "고기"]
+  },
+  {
+    "id": "12",
+    "name": "경리단길 샐러드",
+    "rating": 4.7,
+    "reviews": "390+",
+    "image": "https://placehold.co/100x100/98FB98/228B22?text=샐러드",
+    "description": "신선한 채소와 토핑을 직접 골라 만드는 건강한 샐러드 전문점.",
+    "tags": ["샐러드", "건강식"]
+  },
+  {
+    "id": "13",
+    "name": "신촌 떡볶이",
+    "rating": 4.1,
+    "reviews": "1100+",
+    "image": "https://placehold.co/100x100/FFA07A/CD5C5C?text=떡볶이",
+    "description": "매콤달콤한 소스가 중독적인 즉석 떡볶이 맛집.",
+    "tags": ["분식", "떡볶이", "매운맛"]
+  },
+  {
+    "id": "14",
+    "name": "압구정 일식 카츠",
+    "rating": 4.9,
+    "reviews": "880+",
+    "image": "https://placehold.co/100x100/BDB76B/808000?text=돈가스",
+    "description": "겉은 바삭하고 속은 촉촉한 수제 돈카츠를 맛볼 수 있는 곳.",
+    "tags": ["일식", "돈카츠", "튀김"]
+  },
+  {
+    "id": "15",
+    "name": "홍대 베트남 쌀국수",
+    "rating": 4.3,
+    "reviews": "640+",
+    "image": "https://placehold.co/100x100/F0FFF0/808000?text=쌀국수",
+    "description": "깊은 육수와 풍부한 고기가 들어간 베트남 쌀국수 전문점.",
+    "tags": ["베트남", "쌀국수", "아시안"]
+  },
+  {
+    "id": "16",
+    "name": "종각 중국집",
+    "rating": 4.1,
+    "reviews": "920+",
+    "image": "https://placehold.co/100x100/D2691E/8B4513?text=중식",
+    "description": "짜장면과 짬뽕, 탕수육 등 전통적인 중국 요리를 제공.",
+    "tags": ["중식", "짜장면", "짬뽕"]
+  },
+  {
+    "id": "17",
+    "name": "가로수길 스페인 요리",
+    "rating": 4.7,
+    "reviews": "300+",
+    "image": "https://placehold.co/100x100/FFC0CB/FF69B4?text=스페인",
+    "description": "정통 스페인 빠에야와 타파스를 맛볼 수 있는 레스토랑.",
+    "tags": ["스페인", "타파스", "빠에야"]
+  },
+  {
+    "id": "18",
+    "name": "이태원 인도 커리",
+    "rating": 4.5,
+    "reviews": "450+",
+    "image": "https://placehold.co/100x100/8B0000/F08080?text=커리",
+    "description": "다양한 종류의 인도식 커리와 탄두리 치킨을 제공하는 곳.",
+    "tags": ["인도", "커리", "아시안"]
+  },
+  {
+    "id": "19",
+    "name": "신촌 버거",
+    "rating": 4.4,
+    "reviews": "550+",
+    "image": "https://placehold.co/100x100/A9A9A9/4B4B4B?text=버거",
+    "description": "육즙 가득한 수제 버거와 바삭한 감자튀김의 완벽한 조화.",
+    "tags": ["버거", "양식"]
+  },
+  {
+    "id": "20",
+    "name": "강남 퓨전 한식",
+    "rating": 4.8,
+    "reviews": "680+",
+    "image": "https://placehold.co/100x100/B0C4DE/4682B4?text=한식",
+    "description": "전통 한식에 현대적인 감각을 더한 퓨전 한식 레스토랑.",
+    "tags": ["한식", "퓨전"]
+  },
+  {
+    "id": "21",
+    "name": "연남동 이탈리안",
+    "rating": 4.6,
+    "reviews": "320+",
+    "image": "https://placehold.co/100x100/F08080/8B0000?text=파스타",
+    "description": "토마토와 크림 파스타가 유명한 이탈리안 레스토랑.",
+    "tags": ["양식", "파스타", "이탈리안"]
+  },
+  {
+    "id": "22",
+    "name": "을지로 포장마차",
+    "rating": 4.1,
+    "reviews": "760+",
+    "image": "https://placehold.co/100x100/CD5C5C/B22222?text=포차",
+    "description": "레트로 감성 가득한 분위기에서 다양한 안주를 즐길 수 있는 곳.",
+    "tags": ["포차", "한식", "술집"]
+  },
+  {
+    "id": "23",
+    "name": "합정 쌀국수",
+    "rating": 4.4,
+    "reviews": "510+",
+    "image": "https://placehold.co/100x100/F0FFF0/808000?text=쌀국수",
+    "description": "진하고 시원한 육수의 베트남 쌀국수 전문점.",
+    "tags": ["베트남", "쌀국수", "아시안"]
+  },
+  {
+    "id": "24",
+    "name": "건대 양꼬치",
+    "rating": 4.3,
+    "reviews": "890+",
+    "image": "https://placehold.co/100x100/A0A0A0/000000?text=양꼬치",
+    "description": "자동으로 구워지는 양꼬치와 다양한 중국 요리를 맛볼 수 있는 곳.",
+    "tags": ["양꼬치", "중식"]
+  },
+  {
+    "id": "25",
+    "name": "홍대 일본 라멘",
+    "rating": 4.7,
+    "reviews": "650+",
+    "image": "https://placehold.co/100x100/D2B48C/8B4513?text=라멘",
+    "description": "깊고 진한 돈코츠 육수가 일품인 일본 라멘 전문점.",
+    "tags": ["라멘", "일식"]
+  },
+  {
+    "id": "26",
+    "name": "신사동 브리또",
+    "rating": 4.5,
+    "reviews": "400+",
+    "image": "https://placehold.co/100x100/FFD700/000000?text=브리또",
+    "description": "속이 꽉 찬 푸짐한 브리또와 퀘사디아가 맛있는 멕시칸 레스토랑.",
+    "tags": ["멕시코", "브리또"]
+  },
+  {
+    "id": "27",
+    "name": "압구정 스테이크",
+    "rating": 4.9,
+    "reviews": "1000+",
+    "image": "https://placehold.co/100x100/B0C4DE/4682B4?text=스테이크",
+    "description": "숙성 한우 스테이크를 전문으로 하는 고급 레스토랑.",
+    "tags": ["스테이크", "양식", "고기"]
+  },
+  {
+    "id": "28",
+    "name": "서촌 샌드위치",
+    "rating": 4.6,
+    "reviews": "520+",
+    "image": "https://placehold.co/100x100/FAFAD2/8B4513?text=샌드위치",
+    "description": "신선한 재료로 만든 건강한 샌드위치와 샐러드.",
+    "tags": ["샌드위치", "샐러드", "브런치"]
+  },
+  {
+    "id": "29",
+    "name": "대학로 닭갈비",
+    "rating": 4.2,
+    "reviews": "780+",
+    "image": "https://placehold.co/100x100/DDA0DD/4B0082?text=닭갈비",
+    "description": "매콤한 양념에 볶아 먹는 닭갈비와 볶음밥의 조합.",
+    "tags": ["한식", "닭갈비", "매운맛"]
+  },
+  {
+    "id": "30",
+    "name": "가로수길 일식 덮밥",
+    "rating": 4.7,
+    "reviews": "480+",
+    "image": "https://placehold.co/100x100/C0C0C0/333333?text=덮밥",
+    "description": "다양한 재료를 얹은 일본식 덮밥과 우동.",
+    "tags": ["일식", "덮밥", "우동"]
+  },
+  {
+    "id": "31",
+    "name": "홍대 퓨전 레스토랑",
+    "rating": 4.6,
+    "reviews": "590+",
+    "image": "https://placehold.co/100x100/F0FFF0/808000?text=퓨전",
+    "description": "서양 요리와 동양 요리를 융합한 독특한 메뉴.",
+    "tags": ["퓨전", "양식", "아시안"]
+  },
+  {
+    "id": "32",
+    "name": "명동 냉면",
+    "rating": 4.1,
+    "reviews": "1200+",
+    "image": "https://placehold.co/100x100/B0E0E6/4682B4?text=냉면",
+    "description": "시원한 육수와 쫄깃한 면발의 평양냉면과 함흥냉면.",
+    "tags": ["한식", "냉면"]
+  },
+  {
+    "id": "33",
+    "name": "강남 곱창",
+    "rating": 4.8,
+    "reviews": "780+",
+    "image": "https://placehold.co/100x100/FFB6C1/A52A2A?text=곱창",
+    "description": "겉은 바삭하고 속은 부드러운 곱창과 막창을 즐기는 맛집.",
+    "tags": ["곱창", "한식", "고기"]
+  },
+  {
+    "id": "34",
+    "name": "가로수길 샐러드",
+    "rating": 4.5,
+    "reviews": "450+",
+    "image": "https://placehold.co/100x100/98FB98/228B22?text=샐러드",
+    "description": "다양한 토핑과 드레싱을 선택할 수 있는 샐러드 전문점.",
+    "tags": ["샐러드", "건강식"]
+  },
+  {
+    "id": "35",
+    "name": "연희동 케이크",
+    "rating": 4.9,
+    "reviews": "800+",
+    "image": "https://placehold.co/100x100/FAFAD2/8B4513?text=케이크",
+    "description": "매일 직접 만드는 신선한 수제 케이크와 타르트.",
+    "tags": ["디저트", "케이크", "카페"]
+  },
+  {
+    "id": "36",
+    "name": "명동 순두부",
+    "rating": 4.3,
+    "reviews": "610+",
+    "image": "https://placehold.co/100x100/DDA0DD/4B0082?text=순두부",
+    "description": "얼큰하고 시원한 국물의 순두부찌개 전문점.",
+    "tags": ["한식", "순두부", "찌개"]
+  },
+  {
+    "id": "37",
+    "name": "신촌 초밥",
+    "rating": 4.6,
+    "reviews": "950+",
+    "image": "https://placehold.co/100x100/C1C1CD/333333?text=초밥",
+    "description": "입에서 살살 녹는 싱싱한 초밥을 저렴하게 즐길 수 있는 곳.",
+    "tags": ["초밥", "일식"]
+  },
+  {
+    "id": "38",
+    "name": "압구정 딤섬",
+    "rating": 4.8,
+    "reviews": "700+",
+    "image": "https://placehold.co/100x100/D2691E/8B4513?text=딤섬",
+    "description": "다양한 종류의 딤섬과 중국 정통 요리를 맛볼 수 있는 레스토랑.",
+    "tags": ["딤섬", "중식"]
+  },
+  {
+    "id": "39",
+    "name": "북촌 갤러리 카페",
+    "rating": 4.7,
+    "reviews": "600+",
+    "image": "https://placehold.co/100x100/B0E0E6/4682B4?text=카페",
+    "description": "아름다운 갤러리에서 예술과 커피를 동시에 즐기는 특별한 공간.",
+    "tags": ["카페", "갤러리"]
+  },
+  {
+    "id": "40",
+    "name": "종로 쭈꾸미",
+    "rating": 4.4,
+    "reviews": "480+",
+    "image": "https://placehold.co/100x100/FFA07A/CD5C5C?text=쭈꾸미",
+    "description": "매콤한 양념에 볶아낸 쭈꾸미 볶음이 일품인 맛집.",
+    "tags": ["한식", "쭈꾸미", "매운맛"]
+  },
+  {
+    "id": "41",
+    "name": "강남 솥밥",
+    "rating": 4.6,
+    "reviews": "550+",
+    "image": "https://placehold.co/100x100/A9A9A9/4B4B4B?text=솥밥",
+    "description": "정성 가득한 재료로 지은 건강한 솥밥 정식 전문점.",
+    "tags": ["한식", "솥밥"]
+  },
+  {
+    "id": "42",
+    "name": "압구정 랍스터",
+    "rating": 4.9,
+    "reviews": "900+",
+    "image": "https://placehold.co/100x100/B0C4DE/4682B4?text=랍스터",
+    "description": "싱싱한 랍스터 요리를 다양하게 즐길 수 있는 해산물 전문점.",
+    "tags": ["랍스터", "해산물", "양식"]
+  },
+  {
+    "id": "43",
+    "name": "가로수길 와플",
+    "rating": 4.7,
+    "reviews": "720+",
+    "image": "https://placehold.co/100x100/F08080/8B0000?text=와플",
+    "description": "갓 구운 바삭한 와플과 아이스크림의 환상적인 조합.",
+    "tags": ["와플", "디저트", "카페"]
+  },
+  {
+    "id": "44",
+    "name": "이태원 비건 레스토랑",
+    "rating": 4.5,
+    "reviews": "310+",
+    "image": "https://placehold.co/100x100/98FB98/228B22?text=비건",
+    "description": "채식주의자를 위한 다양한 비건 요리를 제공하는 곳.",
+    "tags": ["비건", "채식", "건강식"]
+  },
+  {
+    "id": "45",
+    "name": "홍대 닭꼬치",
+    "rating": 4.2,
+    "reviews": "580+",
+    "image": "https://placehold.co/100x100/FFDAB9/A52A2A?text=꼬치",
+    "description": "다양한 맛의 수제 닭꼬치와 꼬치 요리 전문점.",
+    "tags": ["꼬치", "안주"]
+  },
+  {
+    "id": "46",
+    "name": "강남 태국 요리",
+    "rating": 4.8,
+    "reviews": "670+",
+    "image": "https://placehold.co/100x100/FFC0CB/FF69B4?text=태국",
+    "description": "똠양꿍과 팟타이 등 정통 태국 요리를 즐길 수 있는 레스토랑.",
+    "tags": ["태국", "아시안", "매운맛"]
+  },
+  {
+    "id": "47",
+    "name": "신사동 퓨전 한식",
+    "rating": 4.7,
+    "reviews": "400+",
+    "image": "https://placehold.co/100x100/B0C4DE/4682B4?text=한식",
+    "description": "모던한 분위기에서 즐기는 퓨전 한식 메뉴.",
+    "tags": ["한식", "퓨전"]
+  },
+  {
+    "id": "48",
+    "name": "명동 부대찌개",
+    "rating": 4.1,
+    "reviews": "1100+",
+    "image": "https://placehold.co/100x100/DDA0DD/4B0082?text=부대찌개",
+    "description": "햄, 소시지, 라면 사리가 푸짐한 부대찌개 맛집.",
+    "tags": ["한식", "찌개"]
+  },
+  {
+    "id": "49",
+    "name": "경복궁 한정식",
+    "rating": 4.9,
+    "reviews": "990+",
+    "image": "https://placehold.co/100x100/BDB76B/808000?text=한정식",
+    "description": "궁중 요리를 맛보는 듯한 정갈하고 품격 있는 한정식 코스.",
+    "tags": ["한정식", "한식"]
+  },
+  {
+    "id": "50",
+    "name": "종로 분식집",
+    "rating": 4.0,
+    "reviews": "850+",
+    "image": "https://placehold.co/100x100/FFA07A/CD5C5C?text=분식",
+    "description": "저렴한 가격에 다양한 분식 메뉴를 즐기는 곳.",
+    "tags": ["분식", "김밥", "떡볶이"]
+  }
+]
