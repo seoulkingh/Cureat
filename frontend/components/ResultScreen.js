@@ -56,7 +56,7 @@ const ResultScreen = ({
     isLoading,
     activeFilters,
     toggleFilter,
-    textInputRef
+    textInputRef,
 }) => {
     const navigation = useNavigation();
     const router = useRouter();
@@ -84,7 +84,7 @@ const ResultScreen = ({
     }, []);
 
     const navigateToDetail = (item) => {
-        router.push({ pathname: 'detail', params: item });
+        router.push({ pathname: 'detail', params: { itemData: JSON.stringify(item) } });
     };
 
     return (

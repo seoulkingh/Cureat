@@ -1,3 +1,5 @@
+// frontend/components/DetailScreen.js
+
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, Modal, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -24,13 +26,13 @@ const DetailScreen = ({ data, onBack }) => {
             `${data.name}을(를) 지도에 목적지로 추가합니다.`
         );
         // TODO: 지도 페이지로 이동하는 로직 구현
-        // router.push({ pathname: 'map', params: { destination: data.name } });
+        router.push({ pathname: 'map', params: { destination: data.name } });
     };
 
     const handleListSelect = (listName) => {
         Alert.alert(
             "리스트에 추가",
-            `${data.name}이(가) "${listName}" 리스트에 추가되었습니다.`
+            `${data.name}이(가) \"${listName}\" 리스트에 추가되었습니다.`
         );
         setModalVisible(false);
     };
@@ -42,240 +44,211 @@ const DetailScreen = ({ data, onBack }) => {
     return (
         <SafeAreaView style={styles.safeArea}>
             <ScrollView style={styles.container}>
-                <Image source={{ uri: data.image }} style={styles.headerImage} />
-                <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-                    <Text style={styles.backIcon}>←</Text>
-                </TouchableOpacity>
-                <View style={styles.contentContainer}>
-                    <Text style={styles.name}>{data.name}</Text>
-                    <View style={styles.ratingContainer}>
-                        <Text style={styles.rating}>★ {data.rating}</Text>
-                        <Text style={styles.reviews}>({data.reviews})</Text>
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+                        <Text style={styles.backButtonText}>←</Text>
+                    </TouchableOpacity>
+                    {/* <TouchableOpacity onPress={handleAddToList} style={styles.listButton}>
+                        <Text style={styles.listButtonText}>리스트 추가</Text>
+                    </TouchableOpacity> */}
+                </View>
+
+                {/* 음식점 정보 섹션 */}
+                <View style={styles.infoContainer}>
+                    {/* 상단 이미지 (임시로 placeholder 사용) */}
+                    <Image
+                        source={{ uri: 'https://placehold.co/400x200/A8A8A8/FFFFFF?text=Cureat' }}
+                        style={styles.image}
+                    />
+
+                    <Text style={styles.title}>{data.name}</Text>
+
+                    {/* 주소, 전화번호 */}
+                    <View style={styles.row}>
+                        <Text style={styles.label}>주소: </Text>
+                        <Text style={styles.text}>{data.address}</Text>
                     </View>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.addButton} onPress={handleAddToList}>
-                            <Text style={styles.addButtonText}>담기</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.mapButton} onPress={handleMapAdd}>
-                            <Text style={styles.mapButtonText}>지도에 추가</Text>
-                        </TouchableOpacity>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>전화번호: </Text>
+                        <Text style={styles.text}>{data.phone}</Text>
                     </View>
-                    <View style={styles.infoSection}>
-                        <Text style={styles.sectionTitle}>상세 정보</Text>
-                        <Text style={styles.infoText}>주소: {data.address}</Text>
-                        <Text style={styles.infoText}>운영 시간: {data.hours}</Text>
-                        <Text style={styles.infoText}>전화번호: {data.phone}</Text>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>가격대: </Text>
+                        <Text style={styles.text}>{data.price_range}</Text>
                     </View>
-                    <View style={styles.descriptionSection}>
-                        <Text style={styles.sectionTitle}>설명</Text>
-                        <Text style={styles.descriptionText}>{data.description}</Text>
+
+                    {/* 대표 메뉴 */}
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>대표 메뉴</Text>
+                        <Text style={styles.sectionText}>
+                            {data.signature_dishes && data.signature_dishes.join(', ')}
+                        </Text>
                     </View>
-                    <View style={styles.tagsContainer}>
-                        {data.tags.map((tag, index) => (
-                            <View key={index} style={styles.tag}>
-                                <Text style={styles.tagText}>{tag}</Text>
-                            </View>
+
+                    {/* 장점 */}
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>장점</Text>
+                        {data.pros && data.pros.map((pro, index) => (
+                            <Text key={index} style={styles.bulletText}>• {pro}</Text>
                         ))}
                     </View>
+
+                    {/* 단점 */}
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>단점</Text>
+                        {data.cons && data.cons.map((con, index) => (
+                            <Text key={index} style={styles.bulletText}>• {con}</Text>
+                        ))}
+                    </View>
+
+                    {/* 키워드 */}
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>키워드</Text>
+                        <Text style={styles.sectionText}>
+                            {data.keywords && data.keywords.join(', ')}
+                        </Text>
+                    </View>
                 </View>
+
+                {/* 버튼 영역 */}
+                <View style={styles.buttonContainer}>
+                    {/* <TouchableOpacity style={styles.mapButton} onPress={handleAddToList}>
+                        <Text style={styles.mapButtonText}>리스트 추가</Text>
+                    </TouchableOpacity> */}
+
+                    <TouchableOpacity style={styles.mapButton} onPress={handleMapAdd}>
+                        <Text style={styles.mapButtonText}>지도에 추가</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <TouchableOpacity
+                        style={styles.modalOverlay}
+                        activeOpacity={1}
+                        onPressOut={() => setModalVisible(false)}
+                    >
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>리스트 선택</Text>
+                            {dummyLists.map(list => (
+                                <TouchableOpacity
+                                    key={list.id}
+                                    style={styles.listButton}
+                                    onPress={() => handleListSelect(list.name)}
+                                >
+                                    <Text style={styles.listButtonText}>{list.name}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    </TouchableOpacity>
+                </Modal>
             </ScrollView>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>리스트 선택</Text>
-                        {dummyLists.map(list => (
-                            <TouchableOpacity
-                                key={list.id}
-                                style={styles.listButton}
-                                onPress={() => handleListSelect(list.name)}
-                            >
-                                <Text style={styles.listButtonText}>{list.name}</Text>
-                            </TouchableOpacity>
-                        ))}
-                        <TouchableOpacity style={styles.modalCloseButton} onPress={() => setModalVisible(false)}>
-                            <Text style={styles.modalCloseText}>닫기</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
-
             <Footer />
         </SafeAreaView>
     );
 };
 
+// styles를 컴포넌트 바로 아래에 위치시킵니다.
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#fff',
     },
     container: {
         flex: 1,
-    },
-    headerImage: {
-        width: '100%',
-        height: 250,
-        resizeMode: 'cover',
-    },
-    backButton: {
-        position: 'absolute',
-        top: 20,
-        left: 20,
-        padding: 10,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        borderRadius: 25,
-    },
-    backIcon: {
-        fontSize: 24,
-        color: '#fff',
-    },
-    contentContainer: {
         padding: 20,
-        marginTop: -50,
-        backgroundColor: '#fff',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: -5 },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-        elevation: 10,
     },
-    name: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        marginBottom: 5,
-        color: '#000',
-    },
-    ratingContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    rating: {
-        fontSize: 18,
-        color: '#F4B400',
-        fontWeight: 'bold',
-        marginRight: 5,
-    },
-    reviews: {
-        fontSize: 16,
-        color: '#888',
-    },
-    buttonContainer: {
+    header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: 20,
     },
-    addButton: {
-        flex: 1,
-        marginRight: 10,
+    backButton: {
+        padding: 10,
+    },
+    backButtonText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#000',
+    },
+    listButton: {
         backgroundColor: '#DE5897',
-        borderRadius: 25,
-        paddingVertical: 12,
-        alignItems: 'center',
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+        borderRadius: 20,
     },
-    addButtonText: {
+    listButtonText: {
         color: '#fff',
-        fontSize: 16,
         fontWeight: 'bold',
     },
-    mapButton: {
-        flex: 1,
-        marginLeft: 10,
-        backgroundColor: '#4CAF50',
-        borderRadius: 25,
-        paddingVertical: 12,
-        alignItems: 'center',
-    },
-    mapButtonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    infoSection: {
+    infoContainer: {
         marginBottom: 20,
+    },
+    image: {
+        width: '100%',
+        height: 200,
+        borderRadius: 10,
+        marginBottom: 15,
+    },
+    title: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        color: '#000',
+    },
+    row: {
+        flexDirection: 'row',
+        marginBottom: 5,
+    },
+    label: {
+        fontWeight: 'bold',
+        color: '#DE5897',
+        fontSize: 16,
+    },
+    text: {
+        fontSize: 16,
+        color: '#333',
+    },
+    section: {
+        marginTop: 15,
     },
     sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 10,
         color: '#000',
+        marginBottom: 8,
     },
-    infoText: {
+    sectionText: {
         fontSize: 16,
-        color: '#666',
+        color: '#333',
+    },
+    bulletText: {
+        fontSize: 16,
+        color: '#333',
         marginBottom: 5,
     },
-    descriptionSection: {
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
         marginBottom: 20,
     },
-    descriptionText: {
-        fontSize: 16,
-        lineHeight: 24,
-        color: '#666',
+    mapButton: {
+        backgroundColor: '#4CAF50',
+        paddingVertical: 12,
+        paddingHorizontal: 30,
+        borderRadius: 25,
     },
-    tagsContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginBottom: 20,
-    },
-    tag: {
-        backgroundColor: '#E0E0E0',
-        borderRadius: 15,
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-        marginRight: 10,
-        marginBottom: 10,
-    },
-    tagText: {
-        fontSize: 14,
-        color: '#666',
-    },
-    tabBar: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        height: 60,
-        borderTopWidth: 1,
-        borderTopColor: '#E0E0E0',
-        backgroundColor: '#fff',
-    },
-    tabItem: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    tabItemActive: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    tabIcon: {
-        fontSize: 24,
-        color: '#888',
-    },
-    tabIconActive: {
-        fontSize: 24,
-        color: '#DE5897',
-    },
-    tabText: {
-        fontSize: 12,
-        color: '#888',
-        marginTop: 4,
-    },
-    tabTextActive: {
-        fontSize: 12,
-        color: '#DE5897',
-        marginTop: 4,
+    mapButtonText: {
+        color: '#fff',
         fontWeight: 'bold',
+        fontSize: 16,
     },
+    // Modal 관련 스타일
     modalOverlay: {
         flex: 1,
         justifyContent: 'flex-end',
@@ -303,21 +276,9 @@ const styles = StyleSheet.create({
     },
     listButtonText: {
         fontSize: 18,
-        color: '#000',
-    },
-    modalCloseButton: {
-        marginTop: 20,
-        padding: 15,
-        backgroundColor: '#DE5897',
-        borderRadius: 25,
-        width: '80%',
-        alignItems: 'center',
-    },
-    modalCloseText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
+        color: '#333',
     },
 });
 
+// 컴포넌트를 내보내는 export default 구문
 export default DetailScreen;
