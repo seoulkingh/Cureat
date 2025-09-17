@@ -8,7 +8,7 @@ from datetime import datetime
 
 # 데이터베이스 파일 경로 설정
 DATABASE_FILE = "search_logs.db"
-SEARCH_RESULTS_FILE = "search_results.json"
+SEARCH_RESULTS_FILE = "restaurant_recommendations.json"
 
 # FastAPI 앱 인스턴스 생성
 app = FastAPI()
@@ -80,7 +80,7 @@ def add_search_log(search_query: SearchQuery):
         raise HTTPException(status_code=500, detail=f"DB 저장 중 오류 발생: {e}")
 
 # API 엔드포인트: 검색 결과 반환 (GET)
-@app.get("/search-results")
+@app.get("/restaurant_recommendations")
 def get_search_results():
     """
     JSON 파일에서 모든 검색 결과를 불러와 반환합니다.
