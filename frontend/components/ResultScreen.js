@@ -3,19 +3,49 @@ import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Fla
 import { useNavigation, useRouter } from 'expo-router';
 import Footer from './Footer';
 
+// const ResultCard = ({ item, onPress }) => (
+//     <TouchableOpacity onPress={() => onPress(item)} style={styles.card}>
+//         <Image source={{ uri: item.image }} style={styles.cardImage} />
+//         <View style={styles.cardContent}>
+//             <Text style={styles.cardTitle}>{item.name}</Text>
+//             <View style={styles.cardRatingContainer}>
+//                 <Text style={styles.cardRating}>★ {item.rating}</Text>
+//                 <Text style={styles.cardReviews}>({item.reviews})</Text>
+//             </View>
+//             <Text style={styles.cardDescription}>{item.description}</Text>
+//         </View>
+//     </TouchableOpacity>
+// );
+
 const ResultCard = ({ item, onPress }) => (
     <TouchableOpacity onPress={() => onPress(item)} style={styles.card}>
-        <Image source={{ uri: item.image }} style={styles.cardImage} />
+        {/* 새로운 JSON 파일에는 image 필드가 없으므로, 기본 이미지 URL을 사용합니다. */}
+        <Image source={{ uri: 'https://placehold.co/100x100/A8A8A8/FFFFFF?text=Cureat' }} style={styles.cardImage} />
         <View style={styles.cardContent}>
+            {/* name 필드를 사용하여 음식점 이름을 표시 */}
             <Text style={styles.cardTitle}>{item.name}</Text>
-            <View style={styles.cardRatingContainer}>
-                <Text style={styles.cardRating}>★ {item.rating}</Text>
-                <Text style={styles.cardReviews}>({item.reviews})</Text>
+
+            {/* rating, reviews, description 대신 다른 정보들을 표시 */}
+            <View style={styles.cardInfoContainer}>
+                {item.signature_dishes && item.signature_dishes.length > 0 && (
+                    <Text style={styles.cardInfo}>시그니처: {item.signature_dishes.join(', ')}</Text>
+                )}
+                {item.pros && (
+                    <Text style={styles.cardInfo}>장점: {item.pros[0]}</Text>
+                )}
+                {item.cons && (
+                    <Text style={styles.cardInfo}>단점: {item.cons[0]}</Text>
+                )}
+
+                {item.price_range && (
+                    <Text style={styles.cardInfo}>가격대: {item.price_range}</Text>
+                )}
             </View>
-            <Text style={styles.cardDescription}>{item.description}</Text>
         </View>
     </TouchableOpacity>
 );
+
+
 
 const ResultScreen = ({
     searchResults,
@@ -87,7 +117,7 @@ const ResultScreen = ({
             <FlatList
                 data={searchResults}
                 renderItem={({ item }) => <ResultCard item={item} onPress={navigateToDetail} />}
-                keyExtractor={item => item.id}
+                keyExtractor={(item, index) => index.toString()}
                 ListEmptyComponent={
                     isLoading ? (
                         <Text style={styles.loadingText}>검색 중...</Text>

@@ -2,7 +2,7 @@
 import { search as testSearch } from './searchServiceTest';
 
 // TODO: 아래 API_ENDPOINT를 당신의 맥북 IP 주소로 수정하세요.
-const API_BASE_URL = 'http://192.168.45.114:8000';
+const API_BASE_URL = 'http://192.168.45.54:8000';
 
 /**
  * 백엔드로 검색어를 전송하여 로그를 남기는 함수
@@ -51,7 +51,8 @@ export const search = async (query) => {
 
   try {
     // 1. 백엔드에서 모든 검색 결과를 가져옵니다.
-    const response = await fetch(`${API_BASE_URL}/search-results`);
+    // const response = await fetch(`${API_BASE_URL}/search-results`);
+    const response = await fetch(`${API_BASE_URL}/restaurant_recommendations`);
     if (!response.ok) {
       throw new Error(`결과 API 호출 중 오류 발생: ${response.status}`);
     }
@@ -61,18 +62,29 @@ export const search = async (query) => {
     if (!query) {
       return allResults;
     }
-    
+
     // 3. 검색어(단일 문자열)를 기준으로 데이터를 필터링합니다.
     const lowerCaseQuery = query.toLowerCase();
+    // const filteredResults = allResults.filter(item => {
+    //   const itemName = item.name.toLowerCase();
+    //   const itemDescription = item.description.toLowerCase();
+    //   const itemTags = item.tags.map(tag => tag.toLowerCase());
+
+    //   return itemName.includes(lowerCaseQuery) || 
+    //          itemDescription.includes(lowerCaseQuery) || 
+    //          itemTags.includes(lowerCaseQuery);
+    // });
+
     const filteredResults = allResults.filter(item => {
       const itemName = item.name.toLowerCase();
-      const itemDescription = item.description.toLowerCase();
-      const itemTags = item.tags.map(tag => tag.toLowerCase());
-      
-      return itemName.includes(lowerCaseQuery) || 
-             itemDescription.includes(lowerCaseQuery) || 
-             itemTags.includes(lowerCaseQuery);
+      const itemKeywords = item.keywords.map(keyword => keyword.toLowerCase());
+      return (
+        itemName.includes(lowerCaseQuery) ||
+        itemKeywords.some(keyword => keyword.includes(lowerCaseQuery))
+      );
     });
+
+
 
     return filteredResults;
 
